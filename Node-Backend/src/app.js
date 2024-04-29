@@ -1,25 +1,19 @@
 const express = require("express");
-const mockData = require("./mockData");
+const bodyParser = require("body-parser");
+const userRouter = require("./Routes/userRouter");
+const mockDataRoutes = require("./Routes/mockDataRoutes");
+const locationRouter = require("./Routes/locationRouter");
+require("dotenv").config();
 
 const app = express();
-const port = 3000;
+app.use(bodyParser.json());
 
-app.get("/api/mockdata", (req, res) => {
-  if (mockData.length === 0) {
-    res
-      .status(404)
-      .json({
-        error: "No data available at this moment!! Please try again later...",
-      });
-  } else {
-    res.json(mockData);
-  }
-});
+const PORT = process.env.PORT || 9000;
 
-app.use((req, res) => {
-  res.status(404).json({ error: "API endpoint not found" });
-});
+app.use("/api", userRouter);
+app.use("/api/mockdata", mockDataRoutes);
+app.use("/api", locationRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
