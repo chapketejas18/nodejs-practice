@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const generateMockData = (req, res, next) => {
+const generateDummyData = (req, res, next) => {
   const mockData = [];
 
   for (let i = 1; i <= 10; i++) {
@@ -17,7 +17,7 @@ const generateMockData = (req, res, next) => {
   next();
 };
 
-const writeMockDataToFile = (req, res) => {
+const writeDummyDataToFile = (req, res) => {
   const mockData = req.mockData;
   const mockDataPath = path.join(__dirname, "..", "dummyData.json");
 
@@ -59,22 +59,8 @@ const getDummyData = (req, res) => {
   }
 };
 
-const getCustomHeader = (req, res, next) => {
-  try {
-    const trackingId = req.headers["X-Tracking-ID"];
-    res.json({
-      message: "This is a protected route",
-      user: req.user,
-      uniqueTrackingId: trackingId,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
-  generateMockData,
-  writeMockDataToFile,
+  generateDummyData,
+  writeDummyDataToFile,
   getDummyData,
-  getCustomHeader,
 };
