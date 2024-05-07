@@ -6,4 +6,14 @@ const validateIdParam = (req, res, next) => {
   next();
 };
 
-module.exports = { validateIdParam };
+const validateParameters = (req, res, next) => {
+  const { user, mail } = req.body;
+  if (!user || !mail) {
+    return res
+      .status(400)
+      .json({ error: "Parameters user and mail are required." });
+  }
+  next();
+};
+
+module.exports = { validateIdParam, validateParameters };
