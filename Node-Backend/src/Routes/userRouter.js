@@ -1,15 +1,28 @@
 const express = require("express");
+const router = express.Router();
+const { registerUser } = require("../Controllers/userRegistration");
 const {
   validateRegistrationInput,
 } = require("../Middleware/validationRegistration");
+const {
+  getData,
+  createData,
+  getDataById,
+  deleteDataById,
+  updateDataById,
+} = require("../Controllers/mockDataController");
+const { validateIdParam } = require("../Middleware/validationParams");
+// const locationValidation = require("../Middleware/locationValidation");
 
-const router = express.Router();
+router.post("/register", validateRegistrationInput, registerUser);
 
-router.post("/register", validateRegistrationInput, (req, res) => {
-  const { username, email } = req.body;
-  res
-    .status(200)
-    .json({ message: `User ${username} registered with email ${email}` });
-});
+router.route("/mockdata").get(getData).post(createData);
+router
+  .route("/mockdata/:id")
+  .get(validateIdParam, getDataById)
+  .delete(validateIdParam, deleteDataById)
+  .put(validateIdParam, updateDataById);
+
+// router.get("/profile", locationValidation);
 
 module.exports = router;
