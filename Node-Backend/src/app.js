@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 9000;
 
 app.use(limiter);
 app.use(logRequest);
-app.use(authenticate);
+// app.use(authenticate);
 app.use("/api", userRouter);
 app.use(errorHandler);
 

@@ -20,11 +20,16 @@ const {
   validateIdParam,
   validateParameters,
 } = require("../Middleware/validationParams");
-const locationValidation = require("../Middleware/locationValidation");
 const authenticate = require("../Middleware/authMiddleware");
-const { processParams } = require("../Controllers/processParams");
+const processParams = require("../Controllers/processParams");
+const validateLocationCode = require("../Middleware/validateLocation");
 
-router.post("/register", validateRegistrationInput, registerUser);
+router.post(
+  "/register",
+  validateRegistrationInput,
+  validateLocationCode,
+  registerUser
+);
 
 router.post("/getdummydata", getDummyData);
 router.get("/generate", authenticate, generateDummyData, writeDummyDataToFile);
@@ -35,8 +40,6 @@ router
   .get(validateIdParam, getDataById)
   .delete(validateIdParam, deleteDataById)
   .put(validateIdParam, updateDataById);
-
-router.get("/profile", locationValidation);
 
 router.get("/errorhandler", () => {
   throw new Error("Error found here");
