@@ -15,6 +15,9 @@
 
 ## Implement middleware to validate the geographic location of the client. If the request is not coming from an expected region, respond with an error.
 
+-> src/Middleware/validateLocation
+-> src/Routes/userRoutes-> /register
+
 ## User Build a validation middleware that dynamically fetches validation rules from a configuration file. The rules should be applied based on the route being accessed.
 
 -> src/Middleware/validationRegistration

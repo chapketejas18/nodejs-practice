@@ -12,9 +12,14 @@ const {
   updateDataById,
 } = require("../Controllers/mockDataController");
 const { validateIdParam } = require("../Middleware/validationParams");
-// const locationValidation = require("../Middleware/locationValidation");
+const validateLocationCode = require("../Middleware/validateLocation");
 
-router.post("/register", validateRegistrationInput, registerUser);
+router.post(
+  "/register",
+  validateRegistrationInput,
+  validateLocationCode,
+  registerUser
+);
 
 router.route("/mockdata").get(getData).post(createData);
 router
@@ -22,7 +27,5 @@ router
   .get(validateIdParam, getDataById)
   .delete(validateIdParam, deleteDataById)
   .put(validateIdParam, updateDataById);
-
-// router.get("/profile", locationValidation);
 
 module.exports = router;
