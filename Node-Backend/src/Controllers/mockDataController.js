@@ -23,7 +23,7 @@ const createData = (req, res) => {
       console.log("Error writing to file:", err);
       return res.status(500).json({ error: "Internal server error" });
     }
-    res.json({ status: "Success", data: mockData });
+    res.json({ status: "Created Successfully" });
   });
 };
 
@@ -36,8 +36,41 @@ const getDataById = (req, res) => {
   res.json(user);
 };
 
+const deleteDataById = (req, res) => {
+  const id = Number(req.params.id);
+  const index = mockData.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return res.status(200).json({ message: "No data found for this ID" });
+  }
+  mockData.splice(index, 1);
+  fs.writeFile(mockDataPath, JSON.stringify(mockData), (err) => {
+    if (err) {
+      console.log("Error writing to file:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    res.json({ status: "Deleted Successfully" });
+  });
+};
+
+const updateDataById = (req, res) => {
+  const id = Number(req.params.id);
+  const index = mockData.findIndex((item) => item.id === id);
+  const body = req.body;
+  const updatedEntry = { ...body, id };
+  mockData[index] = updatedEntry;
+  fs.writeFile(mockDataPath, JSON.stringify(mockData), (err) => {
+    if (err) {
+      console.log("Error writing to file:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    res.json({ status: "Updated Successfully" });
+  });
+};
+
 module.exports = {
-  getData,
-  createData,
   getDataById,
+  createData,
+  getData,
+  deleteDataById,
+  updateDataById,
 };
