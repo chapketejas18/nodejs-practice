@@ -1,12 +1,1 @@
-[
-  { "id": 1, "name": "User 1", "email": "user1@example.com", "age": 29 },
-  { "id": 2, "name": "User 2", "email": "user2@example.com", "age": 52 },
-  { "id": 3, "name": "User 3", "email": "user3@example.com", "age": 38 },
-  { "id": 4, "name": "User 4", "email": "user4@example.com", "age": 29 },
-  { "id": 5, "name": "User 5", "email": "user5@example.com", "age": 30 },
-  { "id": 6, "name": "User 6", "email": "user6@example.com", "age": 22 },
-  { "id": 7, "name": "User 7", "email": "user7@example.com", "age": 33 },
-  { "id": 8, "name": "User 8", "email": "user8@example.com", "age": 67 },
-  { "id": 9, "name": "User 9", "email": "user9@example.com", "age": 59 },
-  { "id": 10, "name": "User 10", "email": "user10@example.com", "age": 49 }
-]
+[{"id":1,"name":"User 1","email":"user1@example.com","age":68},{"id":2,"name":"User 2","email":"user2@example.com","age":26},{"id":3,"name":"User 3","email":"user3@example.com","age":33},{"id":4,"name":"User 4","email":"user4@example.com","age":46},{"id":5,"name":"User 5","email":"user5@example.com","age":41},{"id":6,"name":"User 6","email":"user6@example.com","age":43},{"id":7,"name":"User 7","email":"user7@example.com","age":50},{"id":8,"name":"User 8","email":"user8@example.com","age":29},{"id":9,"name":"User 9","email":"user9@example.com","age":60},{"id":10,"name":"User 10","email":"user10@example.com","age":45}]
