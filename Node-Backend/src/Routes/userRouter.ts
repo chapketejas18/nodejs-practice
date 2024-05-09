@@ -36,9 +36,9 @@ router.get("/generate", authenticate, generateDummyData, writeDummyDataToFile);
 router.route("/mockdata").get(getData).post(createData);
 router
   .route("/mockdata/:id")
-  .get(getDataById)
-  .delete(deleteDataById)
-  .put(updateDataById);
+  .get(validateIdParam, getDataById)
+  .delete(validateIdParam, deleteDataById)
+  .put(validateIdParam, updateDataById);
 
 router.get("/errorhandler", () => {
   throw new Error("Error found here");

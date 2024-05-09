@@ -19,9 +19,9 @@ router.get("/generate", authMiddleware_1.default, dummyDataController_1.generate
 router.route("/mockdata").get(mockDataController_1.getData).post(mockDataController_1.createData);
 router
     .route("/mockdata/:id")
-    .get(mockDataController_1.getDataById)
-    .delete(mockDataController_1.deleteDataById)
-    .put(mockDataController_1.updateDataById);
+    .get(validationParams_1.validateIdParam, mockDataController_1.getDataById)
+    .delete(validationParams_1.validateIdParam, mockDataController_1.deleteDataById)
+    .put(validationParams_1.validateIdParam, mockDataController_1.updateDataById);
 router.get("/errorhandler", () => {
     throw new Error("Error found here");
 });
