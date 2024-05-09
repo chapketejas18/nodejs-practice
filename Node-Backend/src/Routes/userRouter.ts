@@ -32,6 +32,7 @@ router
   .route("/mockdata")
   .get(MockDataHandler.getData)
   .post(MockDataHandler.createData);
+
 router
   .route("/mockdata/:id")
   .get(validateIdParam, MockDataHandler.getDataById)

@@ -10,15 +10,15 @@ interface UserData {
 }
 
 class DummyDataHandler {
-  private mockData: UserData[];
+  generateDummyData = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): void => {
+    const mockData: UserData[] = [];
 
-  constructor() {
-    this.mockData = [];
-  }
-
-  generateDummyData(req: Request, res: Response, next: NextFunction): void {
     for (let i = 1; i <= 10; i++) {
-      this.mockData.push({
+      mockData.push({
         id: i,
         name: `User ${i}`,
         email: `user${i}@example.com`,
@@ -26,16 +26,17 @@ class DummyDataHandler {
       });
     }
 
-    (req as any).mockData = this.mockData;
+    (req as any).mockData = mockData;
     next();
-  }
+  };
 
-  writeDummyDataToFile(req: Request, res: Response): void {
+  writeDummyDataToFile = (req: Request, res: Response): void => {
+    const mockData = (req as any).mockData;
     const mockDataPath = path.join(__dirname, "../../", "dummyData.json");
 
     fs.writeFile(
       mockDataPath,
-      JSON.stringify(this.mockData),
+      JSON.stringify(mockData),
       (err: NodeJS.ErrnoException | null) => {
         if (err) {
           res.status(500).send("Error writing mock data to file");
@@ -44,9 +45,9 @@ class DummyDataHandler {
         }
       }
     );
-  }
+  };
 
-  getDummyData(req: Request, res: Response): void {
+  getDummyData = (req: Request, res: Response): void => {
     try {
       const mockData: UserData[] = require("../dummyData.json");
       if (mockData.length === 0) {
@@ -68,7 +69,7 @@ class DummyDataHandler {
         });
       }
     }
-  }
+  };
 }
 
 export default new DummyDataHandler();
