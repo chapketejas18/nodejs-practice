@@ -10,70 +10,77 @@ interface MockDataItem {
   city: string;
 }
 
-const mockData: MockDataItem[] = require("../../mockData.json");
-const mockDataPath = path.join(__dirname, "../../mockData.json");
+class MockDataHandler {
+  private mockData: MockDataItem[];
+  private mockDataPath: string;
 
-const getData = (req: Request, res: Response): void => {
-  if (mockData.length === 0) {
-    res.status(404).json({
-      error: "No data available at this moment!! Please try again later...",
+  constructor() {
+    this.mockData = require("../../mockData.json");
+    this.mockDataPath = path.join(__dirname, "../../mockData.json");
+  }
+
+  getData(req: Request, res: Response): void {
+    if (this.mockData.length === 0) {
+      res.status(404).json({
+        error: "No data available at this moment!! Please try again later...",
+      });
+    } else {
+      res.json(this.mockData);
+    }
+  }
+
+  createData(req: Request, res: Response): void {
+    const body = req.body;
+    const newEntry = { ...body, id: this.mockData.length + 1 };
+    this.mockData.push(newEntry);
+    fs.writeFile(this.mockDataPath, JSON.stringify(this.mockData), (err) => {
+      if (err) {
+        console.log("Error writing to file:", err);
+        res.status(500).json({ error: "Internal server error" });
+      }
+      res.json({ status: "Created Successfully" });
     });
-  } else {
-    res.json(mockData);
   }
-};
 
-const createData = (req: Request, res: Response): void => {
-  const body = req.body;
-  const newEntry = { ...body, id: mockData.length + 1 };
-  mockData.push(newEntry);
-  fs.writeFile(mockDataPath, JSON.stringify(mockData), (err) => {
-    if (err) {
-      console.log("Error writing to file:", err);
-      res.status(500).json({ error: "Internal server error" });
+  getDataById(req: Request, res: Response): void {
+    const id = Number(req.params.id);
+    const user = this.mockData.find((item) => item.id === id);
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
     }
-    res.json({ status: "Created Successfully" });
-  });
-};
-
-const getDataById = (req: Request, res: Response): void => {
-  const id = Number(req.params.id);
-  const user = mockData.find((item) => item.id === id);
-  if (!user) {
-    res.status(404).json({ error: "User not found" });
+    res.json(user);
   }
-  res.json(user);
-};
 
-const deleteDataById = (req: Request, res: Response): void => {
-  const id = Number(req.params.id);
-  const index = mockData.findIndex((item) => item.id === id);
-  if (index === -1) {
-    res.status(200).json({ message: "No data found for this ID" });
+  deleteDataById(req: Request, res: Response): void {
+    const id = Number(req.params.id);
+    const index = this.mockData.findIndex((item) => item.id === id);
+    if (index === -1) {
+      res.status(200).json({ message: "No data found for this ID" });
+    }
+    this.mockData.splice(index, 1);
+    fs.writeFile(this.mockDataPath, JSON.stringify(this.mockData), (err) => {
+      if (err) {
+        console.log("Error writing to file:", err);
+        res.status(500).json({ error: "Internal server error" });
+      }
+      res.json({ status: "Deleted Successfully" });
+    });
   }
-  mockData.splice(index, 1);
-  fs.writeFile(mockDataPath, JSON.stringify(mockData), (err) => {
-    if (err) {
-      console.log("Error writing to file:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-    res.json({ status: "Deleted Successfully" });
-  });
-};
 
-const updateDataById = (req: Request, res: Response): void => {
-  const id = Number(req.params.id);
-  const index = mockData.findIndex((item) => item.id === id);
-  const body = req.body;
-  const updatedEntry = { ...body, id };
-  mockData[index] = updatedEntry;
-  fs.writeFile(mockDataPath, JSON.stringify(mockData), (err) => {
-    if (err) {
-      console.log("Error writing to file:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-    res.json({ status: "Updated Successfully" });
-  });
-};
+  updateDataById(req: Request, res: Response): void {
+    const id = Number(req.params.id);
+    const index = this.mockData.findIndex((item) => item.id === id);
+    const body = req.body;
+    const updatedEntry = { ...body, id };
+    this.mockData[index] = updatedEntry;
+    fs.writeFile(this.mockDataPath, JSON.stringify(this.mockData), (err) => {
+      if (err) {
+        console.log("Error writing to file:", err);
+        res.status(500).json({ error: "Internal server error" });
+      }
+      res.json({ status: "Updated Successfully" });
+    });
+  }
+}
 
-export { getDataById, createData, getData, deleteDataById, updateDataById };
+export default new MockDataHandler();

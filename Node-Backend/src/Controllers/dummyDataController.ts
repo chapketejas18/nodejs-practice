@@ -9,65 +9,66 @@ interface UserData {
   age: number;
 }
 
-const generateDummyData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  const mockData: UserData[] = [];
+class DummyDataHandler {
+  private mockData: UserData[];
 
-  for (let i = 1; i <= 10; i++) {
-    mockData.push({
-      id: i,
-      name: `User ${i}`,
-      email: `user${i}@example.com`,
-      age: Math.floor(Math.random() * 50) + 20,
-    });
+  constructor() {
+    this.mockData = [];
   }
 
-  (req as any).mockData = mockData;
-  next();
-};
+  generateDummyData(req: Request, res: Response, next: NextFunction): void {
+    for (let i = 1; i <= 10; i++) {
+      this.mockData.push({
+        id: i,
+        name: `User ${i}`,
+        email: `user${i}@example.com`,
+        age: Math.floor(Math.random() * 50) + 20,
+      });
+    }
 
-const writeDummyDataToFile = (req: Request, res: Response): void => {
-  const mockData = (req as any).mockData;
-  const mockDataPath = path.join(__dirname, "../../", "dummyData.json");
+    (req as any).mockData = this.mockData;
+    next();
+  }
 
-  fs.writeFile(
-    mockDataPath,
-    JSON.stringify(mockData),
-    (err: NodeJS.ErrnoException | null) => {
-      if (err) {
-        res.status(500).send("Error writing mock data to file");
+  writeDummyDataToFile(req: Request, res: Response): void {
+    const mockDataPath = path.join(__dirname, "../../", "dummyData.json");
+
+    fs.writeFile(
+      mockDataPath,
+      JSON.stringify(this.mockData),
+      (err: NodeJS.ErrnoException | null) => {
+        if (err) {
+          res.status(500).send("Error writing mock data to file");
+        } else {
+          res.send("Mock data generated and written to file.");
+        }
+      }
+    );
+  }
+
+  getDummyData(req: Request, res: Response): void {
+    try {
+      const mockData: UserData[] = require("../dummyData.json");
+      if (mockData.length === 0) {
+        res.status(404).json({
+          error: "No data available at this moment!! Please try again later...",
+        });
       } else {
-        res.send("Mock data generated and written to file.");
+        res.json(mockData);
+      }
+    } catch (error) {
+      const errnoError = error as NodeJS.ErrnoException;
+      if (errnoError.code === "MODULE_NOT_FOUND") {
+        res.status(404).json({
+          error: "No file and data",
+        });
+      } else {
+        res.status(500).json({
+          error: "Internal server error",
+        });
       }
     }
-  );
-};
-
-const getDummyData = (req: Request, res: Response): void => {
-  try {
-    const mockData: UserData[] = require("../dummyData.json");
-    if (mockData.length === 0) {
-      res.status(404).json({
-        error: "No data available at this moment!! Please try again later...",
-      });
-    } else {
-      res.json(mockData);
-    }
-  } catch (error) {
-    const errnoError = error as NodeJS.ErrnoException;
-    if (errnoError.code === "MODULE_NOT_FOUND") {
-      res.status(404).json({
-        error: "No file and data",
-      });
-    } else {
-      res.status(500).json({
-        error: "Internal server error",
-      });
-    }
   }
-};
+}
 
-export { generateDummyData, writeDummyDataToFile, getDummyData };
+export default new DummyDataHandler();
