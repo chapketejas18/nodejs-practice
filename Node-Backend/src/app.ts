@@ -6,12 +6,9 @@ import logRequest from "./Middleware/logRequest";
 import errorHandler from "./Middleware/errorHandler";
 import limiter from "./Middleware/requestLimiter";
 import dotenv from "dotenv";
-// import serverSetup from "./server";
-// import connectDB from "./config/db";
 import seedCountry from "./country";
 import Country from "./model/countryModel";
 import { connectToMongoDB } from "./utils/connectToDb";
-// import Country from "./models/country";
 
 dotenv.config();
 
