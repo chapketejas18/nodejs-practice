@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import UserRepository from "../repository/user/UserRepository";
 import { mockUserSchema } from "../config/joi";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { userModel } from "../repository/user/UserModel";
 class MockDataHandler {
   getData = async (request: Request, response: Response) => {
     try {
@@ -78,6 +81,53 @@ class MockDataHandler {
     } catch (err) {
       console.error("Error:", err);
       res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+
+  register = async (req: Request, res: Response) => {
+    try {
+      const body = req.body;
+      if (!body.username || !body.email || !body.password) {
+        res.status(400).json({ message: "Please provide all fields" });
+      }
+
+      const existingUser = await UserRepository.registerUser(body);
+
+      if (existingUser) {
+        res.status(400).json({ message: "User Signed up Successfully" });
+      } else {
+        res.status(404).json({ message: "User already exists" });
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+
+  login = async (req: Request, res: Response) => {
+    try {
+      const secretKey = process.env.SECRECT_KEY;
+      console.log("secretKey", secretKey);
+      const body = req.body;
+      if (!body.username || !body.email || !body.password) {
+        return res.status(400).json({ message: "Please provide all fields" });
+      }
+      const existingUser = await UserRepository.authUsers(body);
+      if (existingUser) {
+        const token = jwt.sign(
+          { existingUser },
+          "b44fd2de00412db5ebc7350536b59e86731142f100deef1d486972b9c22e6b11",
+          {
+            expiresIn: "30m",
+          }
+        );
+        return res.status(200).json({ token: token, user: existingUser });
+      } else {
+        return res.status(404).json({ message: "User not found" });
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   };
 }

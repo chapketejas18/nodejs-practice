@@ -18,7 +18,7 @@ router.post("/getdummydata", dummyDataController_1.default.getDummyData);
 router.get("/generate", authMiddleware_1.default, dummyDataController_1.default.generateDummyData, dummyDataController_1.default.writeDummyDataToFile);
 router
     .route("/mockdata")
-    .get(mockDataController_1.default.getData)
+    .get(authMiddleware_1.default, mockDataController_1.default.getData)
     .post(mockDataController_1.default.createData);
 router
     .route("/mockdata/:id")
@@ -32,4 +32,6 @@ router.post("/processparams", validationParams_1.validateParameters, processPara
 router.get("/healthcheck", (req, res) => {
     res.status(200).json({ message: "Everything is working properly" });
 });
+router.post("/signup", mockDataController_1.default.register);
+router.get("/login", mockDataController_1.default.login);
 exports.default = router;

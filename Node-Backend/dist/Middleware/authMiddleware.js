@@ -1,7 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jwt = require("jsonwebtoken");
-const secretKey = "b44fd2de00412db5ebc7350536b59e86731142f100deef1d486972b9c22e6b11";
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const secretKey = process.env.SECRECT_KEY;
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization;
     if (!token) {

@@ -27,6 +27,24 @@ class UserRepository {
         this.updateDataById = (id, body) => __awaiter(this, void 0, void 0, function* () {
             return UserModel_1.userModel.findByIdAndUpdate(id, body, { new: true });
         });
+        this.registerUser = (body) => __awaiter(this, void 0, void 0, function* () {
+            const mail = body.email;
+            const user = yield UserModel_1.userModel.findById(mail);
+            if (!user) {
+                return UserModel_1.userModel.create(body);
+            }
+        });
+        this.authUsers = (body) => __awaiter(this, void 0, void 0, function* () {
+            const email = body.email;
+            const user = yield UserModel_1.userModel.findOne({ email });
+            if (!user) {
+                return null;
+            }
+            if (user.password !== body.password) {
+                return null;
+            }
+            return user;
+        });
     }
 }
 exports.default = new UserRepository();

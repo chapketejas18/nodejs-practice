@@ -12,9 +12,9 @@ const userSchema = joi_1.default.object({
 });
 exports.userSchema = userSchema;
 const mockUserSchema = joi_1.default.object({
-    first_name: joi_1.default.string().alphanum().min(3).max(30).required(),
-    last_name: joi_1.default.string().alphanum().min(3).max(30).required(),
-    email: joi_1.default.string().email().required(),
-    city: joi_1.default.string().required(),
+    username: joi_1.default.string().alphanum().min(3).max(30),
+    city: joi_1.default.string(),
+    email: joi_1.default.string().email(),
+    password: joi_1.default.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
 });
 exports.mockUserSchema = mockUserSchema;

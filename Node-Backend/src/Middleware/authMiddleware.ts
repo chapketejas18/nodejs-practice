@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 const jwt = require("jsonwebtoken");
+import dotenv from "dotenv";
 
-const secretKey =
-  "b44fd2de00412db5ebc7350536b59e86731142f100deef1d486972b9c22e6b11";
+dotenv.config();
+const secretKey = process.env.SECRECT_KEY;
 
 declare global {
   namespace Express {

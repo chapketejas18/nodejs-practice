@@ -1,5 +1,7 @@
+import { trusted } from "mongoose";
 import { IUser } from "./IUserModel";
 import { userModel } from "./UserModel";
+import bcrypt from "bcrypt";
 
 class UserRepository {
   getAllUsers = async () => {
@@ -20,6 +22,26 @@ class UserRepository {
 
   updateDataById = async (id: string, body: Partial<IUser>) => {
     return userModel.findByIdAndUpdate(id, body, { new: true });
+  };
+
+  registerUser = async (body: IUser) => {
+    const mail = body.email;
+    const user = await userModel.findById(mail);
+    if (!user) {
+      return userModel.create(body);
+    }
+  };
+
+  authUsers = async (body: IUser) => {
+    const email = body.email;
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return null;
+    }
+    if (user.password !== body.password) {
+      return null;
+    }
+    return user;
   };
 }
 

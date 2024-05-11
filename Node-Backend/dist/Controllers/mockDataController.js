@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserRepository_1 = __importDefault(require("../repository/user/UserRepository"));
 const joi_1 = require("../config/joi");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class MockDataHandler {
     constructor() {
         this.getData = (request, response) => __awaiter(this, void 0, void 0, function* () {
@@ -91,6 +92,49 @@ class MockDataHandler {
             catch (err) {
                 console.error("Error:", err);
                 res.status(500).json({ error: "Internal Server Error" });
+            }
+        });
+        this.register = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const body = req.body;
+                if (!body.username || !body.email || !body.password) {
+                    res.status(400).json({ message: "Please provide all fields" });
+                }
+                const existingUser = yield UserRepository_1.default.registerUser(body);
+                if (existingUser) {
+                    res.status(400).json({ message: "User Signed up Successfully" });
+                }
+                else {
+                    res.status(404).json({ message: "User already exists" });
+                }
+            }
+            catch (err) {
+                console.error("Error:", err);
+                res.status(500).json({ error: "Internal Server Error" });
+            }
+        });
+        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const secretKey = process.env.SECRECT_KEY;
+                console.log("secretKey", secretKey);
+                const body = req.body;
+                if (!body.username || !body.email || !body.password) {
+                    return res.status(400).json({ message: "Please provide all fields" });
+                }
+                const existingUser = yield UserRepository_1.default.authUsers(body);
+                if (existingUser) {
+                    const token = jsonwebtoken_1.default.sign({ existingUser }, "b44fd2de00412db5ebc7350536b59e86731142f100deef1d486972b9c22e6b11", {
+                        expiresIn: "30m",
+                    });
+                    return res.status(200).json({ token: token, user: existingUser });
+                }
+                else {
+                    return res.status(404).json({ message: "User not found" });
+                }
+            }
+            catch (err) {
+                console.error("Error:", err);
+                return res.status(500).json({ error: "Internal Server Error" });
             }
         });
     }

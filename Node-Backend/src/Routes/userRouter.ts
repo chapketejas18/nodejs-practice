@@ -30,7 +30,7 @@ router.get(
 
 router
   .route("/mockdata")
-  .get(MockDataHandler.getData)
+  .get(authenticate, MockDataHandler.getData)
   .post(MockDataHandler.createData);
 
 router
@@ -48,5 +48,8 @@ router.post("/processparams", validateParameters, processParams);
 router.get("/healthcheck", (req: Request, res: Response) => {
   res.status(200).json({ message: "Everything is working properly" });
 });
+
+router.post("/signup", MockDataHandler.register);
+router.get("/login", MockDataHandler.login);
 
 export default router;
