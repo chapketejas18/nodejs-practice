@@ -28,8 +28,8 @@ class UserRepository {
             return UserModel_1.userModel.findByIdAndUpdate(id, body, { new: true });
         });
         this.registerUser = (body) => __awaiter(this, void 0, void 0, function* () {
-            const mail = body.email;
-            const user = yield UserModel_1.userModel.findById(mail);
+            const email = body.email;
+            const user = yield UserModel_1.userModel.findOne({ email });
             if (!user) {
                 return UserModel_1.userModel.create(body);
             }
@@ -37,6 +37,7 @@ class UserRepository {
         this.authUsers = (body) => __awaiter(this, void 0, void 0, function* () {
             const email = body.email;
             const user = yield UserModel_1.userModel.findOne({ email });
+            console.log(user);
             if (!user) {
                 return null;
             }

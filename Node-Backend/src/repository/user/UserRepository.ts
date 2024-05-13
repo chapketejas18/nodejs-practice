@@ -25,8 +25,8 @@ class UserRepository {
   };
 
   registerUser = async (body: IUser) => {
-    const mail = body.email;
-    const user = await userModel.findById(mail);
+    const email = body.email;
+    const user = await userModel.findOne({ email });
     if (!user) {
       return userModel.create(body);
     }
@@ -35,6 +35,7 @@ class UserRepository {
   authUsers = async (body: IUser) => {
     const email = body.email;
     const user = await userModel.findOne({ email });
+    console.log(user);
     if (!user) {
       return null;
     }

@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import UserRepository from "../repository/user/UserRepository";
 import { mockUserSchema } from "../config/joi";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { userModel } from "../repository/user/UserModel";
 class MockDataHandler {
   getData = async (request: Request, response: Response) => {
     try {
@@ -92,7 +90,6 @@ class MockDataHandler {
       }
 
       const existingUser = await UserRepository.registerUser(body);
-
       if (existingUser) {
         res.status(400).json({ message: "User Signed up Successfully" });
       } else {
