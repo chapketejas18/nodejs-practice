@@ -13,6 +13,7 @@ const validationParams_1 = require("../Middleware/validationParams");
 const authMiddleware_1 = __importDefault(require("../Middleware/authMiddleware"));
 const processParams_1 = __importDefault(require("../Controllers/processParams"));
 const validateLocation_1 = __importDefault(require("../Middleware/validateLocation"));
+const isAdmin_1 = __importDefault(require("../Middleware/isAdmin"));
 router.post("/register", validationRegistration_1.validateRegistrationInput, validateLocation_1.default, userRegistration_1.registerUser);
 router.post("/getdummydata", dummyDataController_1.default.getDummyData);
 router.get("/generate", authMiddleware_1.default, dummyDataController_1.default.generateDummyData, dummyDataController_1.default.writeDummyDataToFile);
@@ -34,4 +35,5 @@ router.get("/healthcheck", (req, res) => {
 });
 router.post("/signup", mockDataController_1.default.register);
 router.get("/login", mockDataController_1.default.login);
+router.get("/dashboard", authMiddleware_1.default, isAdmin_1.default, mockDataController_1.default.dashboard);
 exports.default = router;

@@ -116,26 +116,30 @@ class MockDataHandler {
         this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const secretKey = process.env.SECRECT_KEY;
-                console.log("secretKey", secretKey);
                 const body = req.body;
                 if (!body.username || !body.email || !body.password) {
-                    return res.status(400).json({ message: "Please provide all fields" });
+                    res.status(400).json({ message: "Please provide all fields" });
                 }
                 const existingUser = yield UserRepository_1.default.authUsers(body);
                 if (existingUser) {
                     const token = jsonwebtoken_1.default.sign({ existingUser }, "b44fd2de00412db5ebc7350536b59e86731142f100deef1d486972b9c22e6b11", {
                         expiresIn: "30m",
                     });
-                    return res.status(200).json({ token: token, user: existingUser });
+                    res.status(200).json({ token: token, user: existingUser });
                 }
                 else {
-                    return res.status(404).json({ message: "User not found" });
+                    res.status(404).json({ message: "User not found" });
                 }
             }
             catch (err) {
-                console.error("Error:", err);
-                return res.status(500).json({ error: "Internal Server Error" });
+                res.status(500).json({ error: "Internal Server Error" });
             }
+        });
+        this.dashboard = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            res.status(200).json({ message: "Dasboard" });
+        });
+        this.page = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            res.status(200).json({ message: "Page" });
         });
     }
 }

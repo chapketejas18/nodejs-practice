@@ -37,7 +37,6 @@ class UserRepository {
         this.authUsers = (body) => __awaiter(this, void 0, void 0, function* () {
             const email = body.email;
             const user = yield UserModel_1.userModel.findOne({ email });
-            console.log(user);
             if (!user) {
                 return null;
             }

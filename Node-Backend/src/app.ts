@@ -6,9 +6,9 @@ import logRequest from "./Middleware/logRequest";
 import errorHandler from "./Middleware/errorHandler";
 import limiter from "./Middleware/requestLimiter";
 import dotenv from "dotenv";
-import seedCountry from "./country";
-import Country from "./model/countryModel";
 import { connectToMongoDB } from "./utils/connectToDb";
+import seedUsers from "./user";
+import seeduser from "./repository/seed/seedUserModel";
 
 dotenv.config();
 
@@ -24,8 +24,10 @@ app.use("/api", userRouter);
 app.use(errorHandler);
 
 const seedDB = async () => {
-  await Country.deleteMany({});
-  await Country.insertMany(seedCountry);
+  const userCount = await seeduser.countDocuments();
+  if (userCount === 0) {
+    await seeduser.insertMany(seedUsers);
+  }
 };
 
 connectToMongoDB()

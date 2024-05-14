@@ -6,13 +6,11 @@ exports.userSchema = new mongoose_1.Schema({
     username: {
         type: String,
     },
-    city: {
-        type: String,
-    },
     email: {
         type: String,
     },
     password: {
         type: String,
     },
+    role: { type: String, enum: ["user", "admin"], default: "user" },
 });

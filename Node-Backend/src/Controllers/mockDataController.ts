@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import UserRepository from "../repository/user/UserRepository";
 import { mockUserSchema } from "../config/joi";
 import jwt from "jsonwebtoken";
+import { userModel } from "../repository/user/UserModel";
 class MockDataHandler {
   getData = async (request: Request, response: Response) => {
     try {
@@ -104,10 +105,9 @@ class MockDataHandler {
   login = async (req: Request, res: Response) => {
     try {
       const secretKey = process.env.SECRECT_KEY;
-      console.log("secretKey", secretKey);
       const body = req.body;
       if (!body.username || !body.email || !body.password) {
-        return res.status(400).json({ message: "Please provide all fields" });
+        res.status(400).json({ message: "Please provide all fields" });
       }
       const existingUser = await UserRepository.authUsers(body);
       if (existingUser) {
@@ -118,14 +118,21 @@ class MockDataHandler {
             expiresIn: "30m",
           }
         );
-        return res.status(200).json({ token: token, user: existingUser });
+        res.status(200).json({ token: token, user: existingUser });
       } else {
-        return res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "User not found" });
       }
     } catch (err) {
-      console.error("Error:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: "Internal Server Error" });
     }
+  };
+
+  dashboard = async (req: Request, res: Response) => {
+    res.status(200).json({ message: "Dasboard" });
+  };
+
+  page = async (req: Request, res: Response) => {
+    res.status(200).json({ message: "Page" });
   };
 }
 

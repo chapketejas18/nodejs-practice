@@ -12,6 +12,7 @@ import {
 import authenticate from "../Middleware/authMiddleware";
 import processParams from "../Controllers/processParams";
 import validateLocationCode from "../Middleware/validateLocation";
+import isAdmin from "../Middleware/isAdmin";
 
 router.post(
   "/register",
@@ -51,5 +52,7 @@ router.get("/healthcheck", (req: Request, res: Response) => {
 
 router.post("/signup", MockDataHandler.register);
 router.get("/login", MockDataHandler.login);
+
+router.get("/dashboard", authenticate, isAdmin, MockDataHandler.dashboard);
 
 export default router;

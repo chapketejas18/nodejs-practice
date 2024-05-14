@@ -35,7 +35,6 @@ class UserRepository {
   authUsers = async (body: IUser) => {
     const email = body.email;
     const user = await userModel.findOne({ email });
-    console.log(user);
     if (!user) {
       return null;
     }

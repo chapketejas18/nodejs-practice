@@ -19,9 +19,9 @@ const logRequest_1 = __importDefault(require("./Middleware/logRequest"));
 const errorHandler_1 = __importDefault(require("./Middleware/errorHandler"));
 const requestLimiter_1 = __importDefault(require("./Middleware/requestLimiter"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const country_1 = __importDefault(require("./country"));
-const countryModel_1 = __importDefault(require("./model/countryModel"));
 const connectToDb_1 = require("./utils/connectToDb");
+const user_1 = __importDefault(require("./user"));
+const seedUserModel_1 = __importDefault(require("./repository/seed/seedUserModel"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
@@ -32,8 +32,10 @@ app.use(logRequest_1.default);
 app.use("/api", userRouter_1.default);
 app.use(errorHandler_1.default);
 const seedDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield countryModel_1.default.deleteMany({});
-    yield countryModel_1.default.insertMany(country_1.default);
+    const userCount = yield seedUserModel_1.default.countDocuments();
+    if (userCount === 0) {
+        yield seedUserModel_1.default.insertMany(user_1.default);
+    }
 });
 (0, connectToDb_1.connectToMongoDB)()
     .then(() => __awaiter(void 0, void 0, void 0, function* () {

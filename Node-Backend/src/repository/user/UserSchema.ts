@@ -5,13 +5,11 @@ export const userSchema: Schema<IUser> = new Schema({
   username: {
     type: String,
   },
-  city: {
-    type: String,
-  },
   email: {
     type: String,
   },
   password: {
     type: String,
   },
+  role: { type: String, enum: ["user", "admin"], default: "user" },
 });
