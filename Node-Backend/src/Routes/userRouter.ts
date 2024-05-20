@@ -51,7 +51,7 @@ router.get("/healthcheck", (req: Request, res: Response) => {
 });
 
 router.post("/signup", MockDataHandler.register);
-router.get("/login", MockDataHandler.login);
+router.post("/login", MockDataHandler.login);
 
 router.get("/dashboard", authenticate, isAdmin, MockDataHandler.dashboard);
 

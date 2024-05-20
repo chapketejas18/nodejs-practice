@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import { connectToMongoDB } from "./utils/connectToDb";
 import seedUsers from "./user";
 import seeduser from "./repository/seed/seedUserModel";
+import cors from "cors";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 
 const PORT: number = parseInt(process.env.PORT as string, 10) || 9000;
 
+app.use(cors());
 app.use(limiter);
 app.use(logRequest);
 // app.use(authenticate);

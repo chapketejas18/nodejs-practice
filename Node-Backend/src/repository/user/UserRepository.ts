@@ -27,14 +27,16 @@ class UserRepository {
   registerUser = async (body: IUser) => {
     const email = body.email;
     const user = await userModel.findOne({ email });
+    console.log(":::user", user);
     if (!user) {
       return userModel.create(body);
     }
   };
 
   authUsers = async (body: IUser) => {
-    const email = body.email;
-    const user = await userModel.findOne({ email });
+    console.log("🚀 ~ UserRepository ~ authUsers= ~ body:", body);
+    const username = body.username;
+    const user = await userModel.findOne({ username });
     if (!user) {
       return null;
     }

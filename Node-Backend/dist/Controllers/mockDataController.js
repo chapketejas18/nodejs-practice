@@ -97,9 +97,10 @@ class MockDataHandler {
         this.register = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const body = req.body;
-                if (!body.username || !body.email || !body.password) {
-                    res.status(400).json({ message: "Please provide all fields" });
-                }
+                console.log(body);
+                // if (!body.username || !body.email || !body.password) {
+                //   res.status(400).json({ message: "Please provide all fields" });
+                // }
                 const existingUser = yield UserRepository_1.default.registerUser(body);
                 if (existingUser) {
                     res.status(400).json({ message: "User Signed up Successfully" });
@@ -117,7 +118,7 @@ class MockDataHandler {
             try {
                 const secretKey = process.env.SECRECT_KEY;
                 const body = req.body;
-                if (!body.username || !body.email || !body.password) {
+                if (!body.username || !body.password) {
                     res.status(400).json({ message: "Please provide all fields" });
                 }
                 const existingUser = yield UserRepository_1.default.authUsers(body);

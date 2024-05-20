@@ -86,9 +86,10 @@ class MockDataHandler {
   register = async (req: Request, res: Response) => {
     try {
       const body = req.body;
-      if (!body.username || !body.email || !body.password) {
-        res.status(400).json({ message: "Please provide all fields" });
-      }
+      console.log(body);
+      // if (!body.username || !body.email || !body.password) {
+      //   res.status(400).json({ message: "Please provide all fields" });
+      // }
 
       const existingUser = await UserRepository.registerUser(body);
       if (existingUser) {
@@ -106,7 +107,7 @@ class MockDataHandler {
     try {
       const secretKey = process.env.SECRECT_KEY;
       const body = req.body;
-      if (!body.username || !body.email || !body.password) {
+      if (!body.username || !body.password) {
         res.status(400).json({ message: "Please provide all fields" });
       }
       const existingUser = await UserRepository.authUsers(body);
