@@ -34,6 +34,6 @@ router.get("/healthcheck", (req, res) => {
     res.status(200).json({ message: "Everything is working properly" });
 });
 router.post("/signup", mockDataController_1.default.register);
-router.get("/login", mockDataController_1.default.login);
+router.post("/login", mockDataController_1.default.login);
 router.get("/dashboard", authMiddleware_1.default, isAdmin_1.default, mockDataController_1.default.dashboard);
 exports.default = router;
