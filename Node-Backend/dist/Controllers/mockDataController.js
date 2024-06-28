@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserRepository_1 = __importDefault(require("../repository/user/UserRepository"));
-const joi_1 = require("../config/joi");
+const joi_1 = __importDefault(require("../config/joi"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class MockDataHandler {
     constructor() {
@@ -30,7 +30,7 @@ class MockDataHandler {
         this.createData = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const body = req.body;
-                const { error } = joi_1.mockUserSchema.validate(body);
+                const { error } = joi_1.default.validate(body);
                 if (error) {
                     res.status(400).json({ error: error.details[0].message });
                     return;
@@ -77,7 +77,7 @@ class MockDataHandler {
             try {
                 const id = req.params.id;
                 const body = req.body;
-                const { error } = joi_1.mockUserSchema.validate(body);
+                const { error } = joi_1.default.validate(body);
                 if (error) {
                     res.status(400).json({ error: error.details[0].message });
                     return;
@@ -97,12 +97,16 @@ class MockDataHandler {
         this.register = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const body = req.body;
-                console.log(body);
-                // if (!body.username || !body.email || !body.password) {
-                //   res.status(400).json({ message: "Please provide all fields" });
-                // }
-                const existingUser = yield UserRepository_1.default.registerUser(body);
-                if (existingUser) {
+                if (!body.email || !body.password) {
+                    res.status(400).json({ message: "Please provide all fields" });
+                }
+                const { error } = joi_1.default.validate(body);
+                if (error) {
+                    res.status(400).json({ error: error.details[0].message });
+                    return;
+                }
+                const createdUser = yield UserRepository_1.default.registerUser(body);
+                if (createdUser) {
                     res.status(400).json({ message: "User Signed up Successfully" });
                 }
                 else {
@@ -116,17 +120,21 @@ class MockDataHandler {
         });
         this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const secretKey = process.env.SECRECT_KEY;
                 const body = req.body;
-                if (!body.username || !body.password) {
+                if (!body.email || !body.password) {
                     res.status(400).json({ message: "Please provide all fields" });
+                }
+                const { error } = joi_1.default.validate(body);
+                if (error) {
+                    res.status(400).json({ error: error.details[0].message });
+                    return;
                 }
                 const existingUser = yield UserRepository_1.default.authUsers(body);
                 if (existingUser) {
                     const token = jsonwebtoken_1.default.sign({ existingUser }, "b44fd2de00412db5ebc7350536b59e86731142f100deef1d486972b9c22e6b11", {
                         expiresIn: "30m",
                     });
-                    res.status(200).json({ token: token, user: existingUser });
+                    res.status(200).json({ token: token });
                 }
                 else {
                     res.status(404).json({ message: "User not found" });

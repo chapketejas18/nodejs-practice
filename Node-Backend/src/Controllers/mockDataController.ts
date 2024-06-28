@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import UserRepository from "../repository/user/UserRepository";
-import { mockUserSchema } from "../config/joi";
+import userSchema from "../config/joi";
 import jwt from "jsonwebtoken";
-import { userModel } from "../repository/user/UserModel";
 class MockDataHandler {
   getData = async (request: Request, response: Response) => {
     try {
@@ -17,7 +16,7 @@ class MockDataHandler {
   createData = async (req: Request, res: Response): Promise<void> => {
     try {
       const body = req.body;
-      const { error } = mockUserSchema.validate(body);
+      const { error } = userSchema.validate(body);
       if (error) {
         res.status(400).json({ error: error.details[0].message });
         return;
@@ -65,7 +64,7 @@ class MockDataHandler {
       const id = req.params.id;
       const body = req.body;
 
-      const { error } = mockUserSchema.validate(body);
+      const { error } = userSchema.validate(body);
       if (error) {
         res.status(400).json({ error: error.details[0].message });
         return;
@@ -86,13 +85,16 @@ class MockDataHandler {
   register = async (req: Request, res: Response) => {
     try {
       const body = req.body;
-      console.log(body);
-      // if (!body.username || !body.email || !body.password) {
-      //   res.status(400).json({ message: "Please provide all fields" });
-      // }
-
-      const existingUser = await UserRepository.registerUser(body);
-      if (existingUser) {
+      if (!body.email || !body.password) {
+        res.status(400).json({ message: "Please provide all fields" });
+      }
+      const { error } = userSchema.validate(body);
+      if (error) {
+        res.status(400).json({ error: error.details[0].message });
+        return;
+      }
+      const createdUser = await UserRepository.registerUser(body);
+      if (createdUser) {
         res.status(400).json({ message: "User Signed up Successfully" });
       } else {
         res.status(404).json({ message: "User already exists" });
@@ -105,10 +107,14 @@ class MockDataHandler {
 
   login = async (req: Request, res: Response) => {
     try {
-      const secretKey = process.env.SECRECT_KEY;
       const body = req.body;
-      if (!body.username || !body.password) {
+      if (!body.email || !body.password) {
         res.status(400).json({ message: "Please provide all fields" });
+      }
+      const { error } = userSchema.validate(body);
+      if (error) {
+        res.status(400).json({ error: error.details[0].message });
+        return;
       }
       const existingUser = await UserRepository.authUsers(body);
       if (existingUser) {
@@ -119,7 +125,7 @@ class MockDataHandler {
             expiresIn: "30m",
           }
         );
-        res.status(200).json({ token: token, user: existingUser });
+        res.status(200).json({ token: token });
       } else {
         res.status(404).json({ message: "User not found" });
       }

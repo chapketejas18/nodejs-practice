@@ -10,14 +10,18 @@ import { connectToMongoDB } from "./utils/connectToDb";
 import seedUsers from "./user";
 import seeduser from "./repository/seed/seedUserModel";
 import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
 
 dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
 
-const PORT: number = parseInt(process.env.PORT as string, 10) || 9000;
+const PORT: number = parseInt(process.env.PORT as string) || 9000;
 
+app.use(helmet());
+app.use(compression());
 app.use(cors());
 app.use(limiter);
 app.use(logRequest);

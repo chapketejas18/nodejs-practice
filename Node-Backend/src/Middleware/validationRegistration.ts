@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { userSchema } from "../config/joi";
+import userSchema from "../config/joi";
 
 function validateRegistrationInput(
   req: Request,

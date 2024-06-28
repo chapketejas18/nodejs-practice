@@ -30,15 +30,13 @@ class UserRepository {
         this.registerUser = (body) => __awaiter(this, void 0, void 0, function* () {
             const email = body.email;
             const user = yield UserModel_1.userModel.findOne({ email });
-            console.log(":::user", user);
             if (!user) {
                 return UserModel_1.userModel.create(body);
             }
         });
         this.authUsers = (body) => __awaiter(this, void 0, void 0, function* () {
-            console.log("🚀 ~ UserRepository ~ authUsers= ~ body:", body);
-            const username = body.username;
-            const user = yield UserModel_1.userModel.findOne({ username });
+            const email = body.email;
+            const user = yield UserModel_1.userModel.findOne({ email });
             if (!user) {
                 return null;
             }
