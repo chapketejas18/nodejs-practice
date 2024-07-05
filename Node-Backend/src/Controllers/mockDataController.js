@@ -28,6 +28,7 @@ const createData = (req, res) => {
 };
 
 const getDataById = (req, res) => {
+  // throw new Error("Error found");
   const id = Number(req.params.id);
   const user = mockData.find((item) => item.id === id);
   if (!user) {

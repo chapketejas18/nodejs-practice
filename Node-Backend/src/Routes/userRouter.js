@@ -20,9 +20,9 @@ const {
   validateIdParam,
   validateParameters,
 } = require("../Middleware/validationParams");
-const validateLocationCode = require("../Middleware/validateLocation");
 const authenticate = require("../Middleware/authMiddleware");
-const { processParams } = require("../Controllers/processParams");
+const processParams = require("../Controllers/processParams");
+const validateLocationCode = require("../Middleware/validateLocation");
 
 router.post(
   "/register",
