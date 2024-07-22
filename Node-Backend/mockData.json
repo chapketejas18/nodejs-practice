@@ -49,13 +49,6 @@
     "city": "Tiyuguan"
   },
   {
-    "id": 8,
-    "first_name": "Starla",
-    "last_name": "Kittel",
-    "email": "skittel7@ebay.co.uk",
-    "city": "Zaporizhzhya"
-  },
-  {
     "id": 9,
     "first_name": "Lissie",
     "last_name": "Dumper",
@@ -152,13 +145,6 @@
     "last_name": "Le Frank",
     "email": "mlefrankl@bbc.co.uk",
     "city": "Sop Moei"
-  },
-  {
-    "id": 23,
-    "first_name": "Gweneth",
-    "last_name": "Burree",
-    "email": "gburreem@nba.com",
-    "city": "Hengbanqiao"
   },
   {
     "id": 24,
@@ -301,10 +287,9 @@
     "city": "Varginha"
   },
   {
-    "id": 45,
-    "first_name": "Whitman",
-    "last_name": "Bodega",
-    "email": "wbodega18@google.es",
-    "city": "Camatagua"
+    "username": "Tejas",
+    "email": "tsc18102001@gmail.com",
+    "password": "sjegjernjgnjkrkng",
+    "id": 42
   }
 ]

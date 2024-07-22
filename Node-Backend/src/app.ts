@@ -1,11 +1,14 @@
-import express = require("express");
-import bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-parser";
 import userRouter from "./Routes/userRouter";
 import authenticate from "./Middleware/authMiddleware";
 import logRequest from "./Middleware/logRequest";
 import errorHandler from "./Middleware/errorHandler";
 import limiter from "./Middleware/requestLimiter";
-import dotenv = require("dotenv");
+import dotenv from "dotenv";
+import seedCountry from "./country";
+import Country from "./model/countryModel";
+import { connectToMongoDB } from "./utils/connectToDb";
 
 dotenv.config();
 
@@ -20,6 +23,20 @@ app.use(logRequest);
 app.use("/api", userRouter);
 app.use(errorHandler);
 
+const seedDB = async () => {
+  await Country.deleteMany({});
+  await Country.insertMany(seedCountry);
+};
+
+connectToMongoDB()
+  .then(async () => {
+    await seedDB();
+    console.log("Data Inserted");
+  })
+  .catch((err: Error) => {
+    console.error("Data insertion failed", err);
+  });
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server started on PORT: ${PORT}`);
 });

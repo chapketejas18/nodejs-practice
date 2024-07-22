@@ -35,9 +35,9 @@ router
 
 router
   .route("/mockdata/:id")
-  .get(validateIdParam, MockDataHandler.getDataById)
-  .delete(validateIdParam, MockDataHandler.deleteDataById)
-  .put(validateIdParam, MockDataHandler.updateDataById);
+  .get(MockDataHandler.getDataById)
+  .delete(MockDataHandler.deleteDataById)
+  .put(MockDataHandler.updateDataById);
 
 router.get("/errorhandler", () => {
   throw new Error("Error found here");

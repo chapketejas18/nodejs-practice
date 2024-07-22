@@ -49,7 +49,7 @@ class DummyDataHandler {
 
   getDummyData = (req: Request, res: Response): void => {
     try {
-      const mockData: UserData[] = require("../dummyData.json");
+      const mockData: UserData[] = require("../../dummyData.json");
       if (mockData.length === 0) {
         res.status(404).json({
           error: "No data available at this moment!! Please try again later...",
