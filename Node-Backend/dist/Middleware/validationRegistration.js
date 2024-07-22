@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateRegistrationInput = void 0;
+exports.validateRegistrationInput = validateRegistrationInput;
 const joi_1 = require("../config/joi");
 function validateRegistrationInput(req, res, next) {
     const { error } = joi_1.userSchema.validate(req.body);
@@ -9,4 +9,3 @@ function validateRegistrationInput(req, res, next) {
     }
     next();
 }
-exports.validateRegistrationInput = validateRegistrationInput;

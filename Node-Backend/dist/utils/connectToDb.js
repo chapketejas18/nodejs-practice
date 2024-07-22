@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectToMongoDB = void 0;
+exports.connectToMongoDB = connectToMongoDB;
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv = require("dotenv");
 dotenv.config();
@@ -30,4 +30,3 @@ function connectToMongoDB() {
         }
     });
 }
-exports.connectToMongoDB = connectToMongoDB;
