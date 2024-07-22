@@ -1,3 +1,4 @@
+//mock data for data seeding
 const seedCountry: { name: string; code: string; playing: boolean }[] = [
   {
     name: "india",
