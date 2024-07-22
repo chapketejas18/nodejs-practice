@@ -3,18 +3,8 @@ import { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import { registerUser } from "../Controllers/userRegistration";
 import { validateRegistrationInput } from "../Middleware/validationRegistration";
-import {
-  generateDummyData,
-  writeDummyDataToFile,
-  getDummyData,
-} from "../Controllers/dummyDataController";
-import {
-  getData,
-  createData,
-  getDataById,
-  deleteDataById,
-  updateDataById,
-} from "../Controllers/mockDataController";
+import DummyDataHandler from "../Controllers/dummyDataController";
+import MockDataHandler from "../Controllers/mockDataController";
 import {
   validateIdParam,
   validateParameters,
@@ -30,15 +20,24 @@ router.post(
   registerUser
 );
 
-router.post("/getdummydata", getDummyData);
-router.get("/generate", authenticate, generateDummyData, writeDummyDataToFile);
+router.post("/getdummydata", DummyDataHandler.getDummyData);
+router.get(
+  "/generate",
+  authenticate,
+  DummyDataHandler.generateDummyData,
+  DummyDataHandler.writeDummyDataToFile
+);
 
-router.route("/mockdata").get(getData).post(createData);
+router
+  .route("/mockdata")
+  .get(MockDataHandler.getData)
+  .post(MockDataHandler.createData);
+
 router
   .route("/mockdata/:id")
-  .get(getDataById)
-  .delete(deleteDataById)
-  .put(updateDataById);
+  .get(validateIdParam, MockDataHandler.getDataById)
+  .delete(validateIdParam, MockDataHandler.deleteDataById)
+  .put(validateIdParam, MockDataHandler.updateDataById);
 
 router.get("/errorhandler", () => {
   throw new Error("Error found here");
